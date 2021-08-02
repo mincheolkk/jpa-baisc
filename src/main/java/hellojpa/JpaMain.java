@@ -22,30 +22,13 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 멤버 생성하기 (비영속)
-//            Member member = new Member();
-//            member.setId(2L);
-//            member.setName("nameB");
+            Member member = new Member();
+            member.setUsername("bb");
+            member.setRoleType(RoleType.ADMIN);
 
-            // 영속
-//            em.persist(member);
-            // '영속성 컨텍스트를 통해서 엔티티를 영속화한다' 는 의미
-            // persist 는 DB 에 저장하는게 아니라 엔티티를 영속성 컨텍스트에 저장함 !
-            // 영속성 컨텍스트는 "엔티티를 영구 저장하는 환경" 이라는 뜻
-            // 엔티티 매니저를 통해서 영속성 컨텍스트에 접근함 .
-
-            // 멤버 찾기 & 수정
-            Member findMember = em.find(Member.class, 1L);
-            findMember.setName("python");
-            // JPA가 변경이 됐는지 안 됐는지 커밋하는 시점에 체크함 .
-            // em.persist(findMember) 를 할 필요가 없음 (더티 체킹) .
-
-            List<Member> result = em.createQuery("select m from Member as m", Member.class).getResultList();
-            // JPA 는 테이블을 대상으로 코드를 짜는게 아니라 객체를 대상으로 쿼리를 함 .
-            // JPQL 쿼리 실핼하기 전에, 플러시 자동 호출
-
+            em.persist(member);
             tx.commit();
-            // 플러시 자동 호출
+
         } catch (Exception e) {
             tx.rollback();
         } finally {
