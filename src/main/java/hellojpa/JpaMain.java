@@ -23,8 +23,7 @@ public class JpaMain {
 
         try {
             Member member = new Member();
-            member.setUsername("bb");
-            member.setRoleType(RoleType.ADMIN);
+            member.setUsername("s2");
 
             em.persist(member);
             tx.commit();
