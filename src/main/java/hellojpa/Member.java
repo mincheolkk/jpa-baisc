@@ -3,12 +3,15 @@ package hellojpa;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity  //Entity 가 붙었으니 JPA 가 관리하는 객체이고, DB 테이블과 매핑해서 사용함 .
-@SequenceGenerator(name = "member_seq_generator", sequenceName = "member_seq")
+@Entity
+@TableGenerator(
+        name = "MEMBER_SEQ_GENERATOR",
+        table = "MY_SEQUENCES",
+        pkColumnValue = "MEMBER_SEQ", allocationSize = 1) // 운영단에서 table 전략은 잘 안씀 . 
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq_generator")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "MEMBER_SEQ_GENERATOR")
     private Long id;
 
     @Column(name = "name", nullable = false)
