@@ -10,24 +10,37 @@ public class JpaMain {
     public static void main(String[] args) {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
-        // EMF 를 만드는 순간, 데이터 베이스와 연결도 되고 웬만한게 다 됨 .
-        // EMF 는 로딩시점에 딱 하나만 만들어놔야함 .
 
         EntityManager em = emf.createEntityManager();
-        // 트랜잭션 단위를 할때마다 EM 을 꼭 만들어줘야함 .
-        // 요청이 오면 EMF 가 EM 을 생성함 .
 
-        // 데이터를 변경하는 모든 작업은 JPA 에서 꼭 transaction 안에서 작업을 해야함 .
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
         try {
+            // 저장
+            Team team = new Team();
+            team.setName("TeamL");
+            em.persist(team);
+
             Member member = new Member();
-            member.setUsername("s2");
-
+            member.setUsername("member33");
+            member.setTeam(team);
             em.persist(member);
-            tx.commit();
+dd
+            em.flush();
+            em.clear();
+            
+            Member findMember = em.find(Member.class, member.getId());
+            List<Member> members = findMember.getTeam().getMembers();
 
+            for (Member m : members) {
+                System.out.println("m.getUsername() = " + m.getUsername());
+            }
+
+            Team findTeam = findMember.getTeam();
+            System.out.println("findTeam = " + findTeam.getName());
+
+            tx.commit();
         } catch (Exception e) {
             tx.rollback();
         } finally {
