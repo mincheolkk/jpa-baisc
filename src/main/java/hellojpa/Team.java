@@ -24,6 +24,11 @@ public class Team {
         this.members = members;
     }
 
+    public void addMember(Member member) {
+        member.setTeam(this);
+        members.add(member);
+    }
+
     public Long getId() {
         return id;
     }
@@ -38,5 +43,14 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", members=" + members +
+                '}';
     }
 }
