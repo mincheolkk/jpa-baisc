@@ -14,14 +14,14 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-    // 연관 관계 적용 전
-//    @Column(name = "TEAM_ID")
-//    private Long teamId;
-
     // 연관 관계 적용
     @ManyToOne                      // 어떤 관계인지 적어주고
     @JoinColumn(name = "TEAM_ID")   // 어떤 컬럼에 조인하는지
     private Team team;
+
+    @OneToOne
+    @JoinColumn(name = "LOCKER_ID")
+    private Locker locker;
 
     public Long getId() {
         return id;
