@@ -25,10 +25,8 @@ public class Member {
     @JoinColumn(name = "LOCKER_ID")
     private Locker locker;
 
-    // prodcut 와 M2M 설정
-    @ManyToMany
-    @JoinTable(name = "MEMBER_PRODUCT")  //
-    private List<Product> products = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<MemberProduct> memberProducts = new ArrayList<>();
 
     public Long getId() {
         return id;
