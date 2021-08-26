@@ -1,7 +1,9 @@
 package hellojpa;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Member {
@@ -22,6 +24,11 @@ public class Member {
     @OneToOne
     @JoinColumn(name = "LOCKER_ID")
     private Locker locker;
+
+    // prodcut 와 M2M 설정
+    @ManyToMany
+    @JoinTable(name = "MEMBER_PRODUCT")  //
+    private List<Product> products = new ArrayList<>();
 
     public Long getId() {
         return id;
