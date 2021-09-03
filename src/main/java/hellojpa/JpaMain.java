@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -18,34 +19,15 @@ public class JpaMain {
 
         try {
 
-            Movie movie = new Movie();
-            movie.setDirector("Director - A");
-            movie.setActor("Actor - B");
-            movie.setName("KingKong");
-            movie.setPrice(10000);
+            Member member = new Member();
+            member.setCreatedBy("kim");
+            member.setUsername("mc");
+            member.setCreatedDate(LocalDateTime.now());
 
-            em.persist(movie);
-            
+            em.persist(member);
+
             em.flush();
-            em.clear();  // 1차 캐시 삭제됨
-
-            Movie findMove = em.find(Movie.class, movie.getId());
-            System.out.println("findMove = " + findMove);
-
-            //쿼리 결과
-//            select
-//                  movie0_.id as id1_2_0_,
-//                  movie0_1_.name as name2_2_0_,
-//                  movie0_1_.price as price3_2_0_,
-//                  movie0_.actor as actor1_6_0_,
-//                  movie0_.director as director2_6_0_
-//            from
-//                  Movie movie0_
-//            inner join
-//                  Item movie0_1_
-//                      on movie0_.id=movie0_1_.id
-//            where
-//                  movie0_.id=?
+            em.clear();
 
             tx.commit();
         } catch (Exception e) {
