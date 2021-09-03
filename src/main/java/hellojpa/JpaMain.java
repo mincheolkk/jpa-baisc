@@ -17,27 +17,35 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 저장
-            Team team = new Team();
-            team.setName("TeamP");
-            em.persist(team);
 
-            Member member = new Member();
-            member.setUsername("member89");
-            em.persist(member);
+            Movie movie = new Movie();
+            movie.setDirector("Director - A");
+            movie.setActor("Actor - B");
+            movie.setName("KingKong");
+            movie.setPrice(10000);
 
-            // 연관관계 편의 메소드는 1 에 넣어도 되고 N 에 넣어도 됨 .
-            team.addMember(member);
-
+            em.persist(movie);
+            
             em.flush();
-            em.clear();
+            em.clear();  // 1차 캐시 삭제됨
 
-            Team findTeam = em.find(Team.class, team.getId());  // 1차 캐시
-            List<Member> members = findTeam.getMembers();
+            Movie findMove = em.find(Movie.class, movie.getId());
+            System.out.println("findMove = " + findMove);
 
-            for (Member m : members) {
-                System.out.println("m = " + m.getUsername());
-            }
+            //쿼리 결과
+//            select
+//                  movie0_.id as id1_2_0_,
+//                  movie0_1_.name as name2_2_0_,
+//                  movie0_1_.price as price3_2_0_,
+//                  movie0_.actor as actor1_6_0_,
+//                  movie0_.director as director2_6_0_
+//            from
+//                  Movie movie0_
+//            inner join
+//                  Item movie0_1_
+//                      on movie0_.id=movie0_1_.id
+//            where
+//                  movie0_.id=?
 
             tx.commit();
         } catch (Exception e) {
