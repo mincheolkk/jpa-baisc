@@ -19,15 +19,9 @@ public class JpaMain {
 
         try {
 
-            Member member = new Member();
-            member.setCreatedBy("kim");
-            member.setUsername("mc");
-            member.setCreatedDate(LocalDateTime.now());
-
-            em.persist(member);
-
-            em.flush();
-            em.clear();
+            Member member = em.find(Member.class, 1L);
+            printMember(member);
+            printMemberAndTeam(member);
 
             tx.commit();
         } catch (Exception e) {
@@ -39,5 +33,21 @@ public class JpaMain {
         }
 
         emf.close();
+    }
+
+    private static void printMember(Member member) {
+        System.out.println("member = " + member.getUsername());
+    }
+
+    // 위는 멤버만 필요하고 아래는 멤버와 팀을 둘 다 필요로 하는 상황. 위의 경우엔 팀까지 가져오면 최적화가 아님
+    // JPA 는 이런 문제를 지연 로딩이나 프록시 등으로 해결
+
+    private static void printMemberAndTeam(Member member) {
+
+        String username = member.getUsername();
+        System.out.println("username = " + username);
+
+        Team team = member.getTeam();
+        System.out.println("team = " + team.getName());
     }
 }
