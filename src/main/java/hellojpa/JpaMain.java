@@ -37,12 +37,21 @@ public class JpaMain {
             Member m = em.find(Member.class, member.getId());
 
             System.out.println("m.getTeam().getClass() = " + m.getTeam().getClass());
-            // lazy 로딩으로 가져올 때는 프록시 객체
+            // eager 로딩. 조인해서 가지고옴
+            // 쿼리 결과 일부
+//            left outer join
+//            Team team1_
+//            on member0_.team_TEAM_ID=team1_.TEAM_ID
 
             System.out.println("+++++++++++++++++++");
-            m.getTeam().getName();
-            // 실제 team 을 사용하는 시점에 초기화
+            System.out.println("m.getTeam().getName() = " + m.getTeam().getName());
             System.out.println("+++++++++++++++++++");
+
+            List<Member> members = em.createQuery("select m from Member m", Member.class)
+                    .getResultList();
+            // 먼저 SQL 이 나간다. select * from Member
+            // Member 를 보니 eager 로 팀을 가져와야 된다.
+            // 그러니 SQL 이 또 나간다. select * from Team where TEAM_ID = xxx
 
 
             tx.commit();

@@ -14,7 +14,7 @@ public class Member extends BaseEntity{
     private String username;
 
     // 연관 관계 적용
-    @ManyToOne(fetch = FetchType.LAZY)   // 지연로딩으로 세팅하면 연관된 것(여기서는 team) 을 프록시로 가져옴
+    @ManyToOne(fetch = FetchType.EAGER)   // 실무에선 즉시로딩 사용 잘 안함. 1 + N 문제 일으킴
     @JoinColumn
     private Team team;
 
