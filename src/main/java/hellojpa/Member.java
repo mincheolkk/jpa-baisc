@@ -14,8 +14,8 @@ public class Member extends BaseEntity{
     private String username;
 
     // 연관 관계 적용
-    @ManyToOne                      // 어떤 관계인지 적어주고
-    @JoinColumn(name = "TEAM_ID")   // 어떤 컬럼에 조인하는지
+    @ManyToOne(fetch = FetchType.LAZY)   // 지연로딩으로 세팅하면 연관된 것(여기서는 team) 을 프록시로 가져옴
+    @JoinColumn
     private Team team;
 
     public Long getId() {
