@@ -21,38 +21,20 @@ public class JpaMain {
 
         try {
 
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Member member = new Member();
-            member.setUsername("mincheolkk");
-            member.setTeam(team);
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-            em.persist(member);
+            em.persist(parent);
+            em.persist(child1);
+            em.persist(child2);
 
-            em.flush();
-            em.clear();
-
-            Member m = em.find(Member.class, member.getId());
-
-            System.out.println("m.getTeam().getClass() = " + m.getTeam().getClass());
-            // eager 로딩. 조인해서 가지고옴
-            // 쿼리 결과 일부
-//            left outer join
-//            Team team1_
-//            on member0_.team_TEAM_ID=team1_.TEAM_ID
-
-            System.out.println("+++++++++++++++++++");
-            System.out.println("m.getTeam().getName() = " + m.getTeam().getName());
-            System.out.println("+++++++++++++++++++");
-
-            List<Member> members = em.createQuery("select m from Member m", Member.class)
-                    .getResultList();
-            // 먼저 SQL 이 나간다. select * from Member
-            // Member 를 보니 eager 로 팀을 가져와야 된다.
-            // 그러니 SQL 이 또 나간다. select * from Team where TEAM_ID = xxx
-
+            // parent 중심으로 코드를 작성하고 싶다.
+            // parent 가 child 를 관리해줘서 parent 가 persist 될 때, child 도 자동으로 됐으면 좋겠다.
+            // 이 때 사용하는 것이 cascade
 
             tx.commit();
         } catch (Exception e) {
