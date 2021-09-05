@@ -29,12 +29,15 @@ public class JpaMain {
             parent.addChild(child2);
 
             em.persist(parent);
-            em.persist(child1);
-            em.persist(child2);
 
-            // parent 중심으로 코드를 작성하고 싶다.
-            // parent 가 child 를 관리해줘서 parent 가 persist 될 때, child 도 자동으로 됐으면 좋겠다.
-            // 이 때 사용하는 것이 cascade
+            em.flush();
+            em.clear();
+
+            Parent findParent = em.find(Parent.class, parent.getId());
+            em.remove(findParent);
+            // 쿼리 결과 일부
+            // /* delete hellojpa.Child */ delete from child where id=?
+
 
             tx.commit();
         } catch (Exception e) {
