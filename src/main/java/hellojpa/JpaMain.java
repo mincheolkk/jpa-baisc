@@ -21,23 +21,13 @@ public class JpaMain {
 
         try {
 
-            Child child1 = new Child();
-            Child child2 = new Child();
 
-            Parent parent = new Parent();
-            parent.addChild(child1);
-            parent.addChild(child2);
+            Member member = new Member();
+            member.setUsername("hello");
+            member.setHomeAddress(new Address("CITY","STREET","K-99"));
+            member.setWorkperiod(new Period());
 
-            em.persist(parent);
-
-            em.flush();
-            em.clear();
-
-            Parent findParent = em.find(Parent.class, parent.getId());
-            em.remove(findParent);
-            // 쿼리 결과 일부
-            // /* delete hellojpa.Child */ delete from child where id=?
-
+            em.persist(member);
 
             tx.commit();
         } catch (Exception e) {

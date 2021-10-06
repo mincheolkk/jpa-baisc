@@ -13,10 +13,25 @@ public class Member extends BaseEntity{
     @Column(name = "USERNAME")
     private String username;
 
-    // 연관 관계 적용
-    @ManyToOne(fetch = FetchType.EAGER)   // 실무에선 즉시로딩 사용 잘 안함. 1 + N 문제 일으킴
-    @JoinColumn
-    private Team team;
+    // period
+    @Embedded
+    private Period workperiod;
+    // @Embeddable 클래스의 멤버변수를 컬럼으로 가짐
+
+    // address
+    @Embedded
+    private Address homeAddress;
+
+    @Embedded // Address 임베디드 타입으로 homeaddress 를 사용중이니 밑에 속성을 걸어줘야함.
+    @AttributeOverrides({
+            @AttributeOverride(name = "city",
+                        column = @Column(name = "WORK_CITY")),
+            @AttributeOverride(name = "street",
+                        column = @Column(name = "WORK_STREET")),
+            @AttributeOverride(name = "zipcode",
+                    column = @Column(name = "WORK_ZIPCODE"))
+    })
+    private Address workAddress;
 
     public Long getId() {
         return id;
@@ -34,20 +49,19 @@ public class Member extends BaseEntity{
         this.username = username;
     }
 
-    public Team getTeam() {
-        return team;
+    public Period getWorkperiod() {
+        return workperiod;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setWorkperiod(Period workperiod) {
+        this.workperiod = workperiod;
     }
 
-    @Override
-    public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", team=" + team +
-                '}';
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 }
