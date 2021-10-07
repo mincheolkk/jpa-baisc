@@ -21,13 +21,30 @@ public class JpaMain {
 
         try {
 
+            Address address = new Address("CITY", "STREET", "K-99");
 
             Member member = new Member();
-            member.setUsername("hello");
-            member.setHomeAddress(new Address("CITY","STREET","K-99"));
-            member.setWorkperiod(new Period());
-
+            member.setUsername("member1");
+            member.setHomeAddress(address);
             em.persist(member);
+
+            Member member2 = new Member();
+            member2.setUsername("member2");
+//            member2.setHomeAddress(address); 사이드 이팩트 발생할 수 있음. 아래처럼 복사해서 사용
+            Address copyAddress = new Address(address.getCity(), address.getStreet(), address.getZipcode());
+            member2.setHomeAddress(copyAddress);
+            em.persist(member2);
+
+
+            member.getHomeAddress().setCity("new CITY"); // member1, member2 둘 다 바뀜
+
+            // 객체의 공유 참조를 피하기 위해서 설정자로만 값을 설정하고 수정자를 만들지 않으면 됨
+            // 수정자를 막은 상태에서 값을 바꾸려면 어떻게 해야할까 ?
+            // value object 는 이론적으로 값을 통으로 바꿔넣는게 맞음
+
+            Address newAddress = new Address("new CITY", address.getStreet(), address.getZipcode());
+            member.setHomeAddress(newAddress);
+
 
             tx.commit();
         } catch (Exception e) {

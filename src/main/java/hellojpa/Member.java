@@ -22,23 +22,8 @@ public class Member extends BaseEntity{
     @Embedded
     private Address homeAddress;
 
-    @Embedded // Address 임베디드 타입으로 homeaddress 를 사용중이니 밑에 속성을 걸어줘야함.
-    @AttributeOverrides({
-            @AttributeOverride(name = "city",
-                        column = @Column(name = "WORK_CITY")),
-            @AttributeOverride(name = "street",
-                        column = @Column(name = "WORK_STREET")),
-            @AttributeOverride(name = "zipcode",
-                    column = @Column(name = "WORK_ZIPCODE"))
-    })
-    private Address workAddress;
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {
