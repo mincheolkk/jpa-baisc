@@ -21,29 +21,50 @@ public class JpaMain {
 
         try {
 
-            Address address = new Address("CITY", "STREET", "K-99");
-
             Member member = new Member();
             member.setUsername("member1");
-            member.setHomeAddress(address);
+            member.setHomeAddress(new Address("city1", "street","1000"));
+
+            member.getFavoriteFoods().add("chicken");
+            member.getFavoriteFoods().add("pizza");
+            member.getFavoriteFoods().add("pork");
+
+//            member.getAddressesHistory().add(new Address("old1", "street","1000"));
+//            member.getAddressesHistory().add(new Address("old2", "street","1000"));
+
+            // 값 타입 컬렉션을 일대다 관계 설정으로 바꿈
+            member.getAddressesHistory().add(new AddressEntity("old1", "street", "1000"));
+            member.getAddressesHistory().add(new AddressEntity("old2", "street", "1000"));
+
+
             em.persist(member);
+            // member 만 persist 했는데 값 타임 컬렉션들은 자동으로 같이 라이프 사이클이 돌아감 .
+            // 값 타입의 라이프 사이클은 member 에 의존함 .
 
-            Member member2 = new Member();
-            member2.setUsername("member2");
-//            member2.setHomeAddress(address); 사이드 이팩트 발생할 수 있음. 아래처럼 복사해서 사용
-            Address copyAddress = new Address(address.getCity(), address.getStreet(), address.getZipcode());
-            member2.setHomeAddress(copyAddress);
-            em.persist(member2);
+            em.flush();
+            em.clear();
 
+            System.out.println("===========start==========");
+            Member findMember = em.find(Member.class, member.getId());
 
-            member.getHomeAddress().setCity("new CITY"); // member1, member2 둘 다 바뀜
+            // 컬렉션들은 지연로딩
+//            List<Address> addressesHistory = findMember.getAddressesHistory();
+//            for (Address address : addressesHistory) {
+//                System.out.println("address = " + address.getCity());
+//            }
+//
+//            // 값 타입 수정하기
+//            // city -> newCity
+//            Address a = findMember.getHomeAddress();
+//            findMember.setHomeAddress(new Address("newCity", a.getStreet(), a.getZipcode()));
+//
+//            // chicken -> ramen
+//            findMember.getFavoriteFoods().remove("chicken");
+//            findMember.getFavoriteFoods().add("ramen");
 
-            // 객체의 공유 참조를 피하기 위해서 설정자로만 값을 설정하고 수정자를 만들지 않으면 됨
-            // 수정자를 막은 상태에서 값을 바꾸려면 어떻게 해야할까 ?
-            // value object 는 이론적으로 값을 통으로 바꿔넣는게 맞음
-
-            Address newAddress = new Address("new CITY", address.getStreet(), address.getZipcode());
-            member.setHomeAddress(newAddress);
+            // 기본적으로 컬렉션은 대상을 찾을 때, equals 를 사용함. equals 와 hashcode 가 제대로 구현되어 있어야 함
+//            findMember.getAddressesHistory().remove(new Address("old1", "street", "1000"));
+//            findMember.getAddressesHistory().add(new Address("newCity1", "street", "1000"));
 
 
             tx.commit();

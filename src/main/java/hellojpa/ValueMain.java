@@ -14,7 +14,7 @@ public class ValueMain {
 
         System.out.println("address1 == address2 : " + (address1 == address2));
         // 값 타입의 비교는 equals . 클래스에 오버라이드해서 사용.
-        System.out.println("address1 equals address2 : " + (address1.equals(address2));
+        System.out.println("address1 equals address2 : " + (address1.equals(address2)));
 
     }
 }
